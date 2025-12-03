@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,15 +21,15 @@ export const metadata: Metadata = {
       {
         media: "(prefers-color-scheme: light)",
         url: "/logo.svg",
-        href: "/logo.svg"
+        href: "/logo.svg",
       },
       {
         media: "(prefers-color-scheme: dark)",
         url: "/logo-dark.svg",
-        href: "/logo-dark.svg"
-      }
-    ]
-  }
+        href: "/logo-dark.svg",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
@@ -37,11 +38,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+          storageKey="jotion-theme"
+        >
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
