@@ -9,11 +9,28 @@ function Heroes() {
             src={"/documents.png"}
             fill
             alt="Documents"
-            className="object-contain"
+            className="object-contain dark:hidden"
+          />
+          <Image
+            src={"/documents-dark.png"}
+            fill
+            alt="Documents"
+            className="object-contain hidden dark:block"
           />
         </div>
         <div className="relative size-[400px] hidden md:block">
-          <Image src={"/reading.png"} fill alt="Reading" className="object-contain" />
+          <Image
+            src={"/reading.png"}
+            fill
+            alt="Reading"
+            className="object-contain dark:hidden"
+          />
+          <Image
+            src={"/reading-dark.png"}
+            fill
+            alt="Reading"
+            className="object-contain hidden dark:block"
+          />
         </div>
       </div>
     </div>
