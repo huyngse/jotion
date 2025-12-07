@@ -1,15 +1,25 @@
 "use client";
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { cn } from "@/lib/utils";
+import { useUser } from "@clerk/nextjs";
 import { useMutation } from "convex/react";
 import {
   ChevronDownIcon,
   ChevronRightIcon,
   LucideIcon,
+  MoreHorizontalIcon,
   PlusIcon,
+  TrashIcon,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { MouseEventHandler } from "react";
@@ -42,9 +52,22 @@ function Item({
   onExpand,
 }: ItemProps) {
   const router = useRouter();
+  const { user } = useUser();
   const create = useMutation(api.documents.create);
+  const archive = useMutation(api.documents.archive);
 
   const ChevronIcon = expanded ? ChevronDownIcon : ChevronRightIcon;
+
+  const handleArchive: MouseEventHandler<HTMLDivElement> = (e) => {
+    e.stopPropagation();
+    if (!id) return;
+    const promise = archive({ id });
+    toast.promise(promise, {
+      loading: "Moving to trash...",
+      success: "Note moved to trash!",
+      error: "Failed to archive note.",
+    });
+  };
 
   const handleCreate: MouseEventHandler<HTMLDivElement> = (e) => {
     e.stopPropagation();
@@ -106,6 +129,39 @@ function Item({
       )}
       {id && (
         <div className="ml-auto flex items-center gap-x-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              asChild
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+            >
+              <div
+                role="button"
+                className="opacity-0 group-hover:opacity-100 h-full ml-auto rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600"
+              >
+                <MoreHorizontalIcon className="size-4 text-muted-foreground" />
+              </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              className="w-60"
+              align="start"
+              side="right"
+              forceMount
+            >
+              <DropdownMenuItem
+                onClick={handleArchive}
+                className="cursor-pointer"
+              >
+                <TrashIcon className="size-4 mr-2" />
+                Delete
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <div className="text-xs text-muted-foreground p-2">
+                Latest edited by: {user?.fullName}
+              </div>
+            </DropdownMenuContent>
+          </DropdownMenu>
           <div
             className="opacity-0 group-hover:opacity-100 h-full ml-auto rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600"
             onClick={handleCreate}
