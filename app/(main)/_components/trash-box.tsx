@@ -1,5 +1,6 @@
 "use client";
 
+import ConfirmModal from "@/components/modals/confirm-modal";
 import Spinner from "@/components/spinner";
 import { Input } from "@/components/ui/input";
 import { api } from "@/convex/_generated/api";
@@ -92,12 +93,14 @@ function TrashBox() {
               >
                 <UndoIcon className="size-4 text-muted-foreground" />
               </div>
-              <div
-                role="button"
-                className="rounded-sm p-2 hover:bg-neutral-200 dark:hover:bg-neutral-700 cursor-pointer"
-              >
-                <TrashIcon className="size-4 text-muted-foreground" />
-              </div>
+              <ConfirmModal onConfirm={() => handleRemove(document._id)}>
+                <div
+                  role="button"
+                  className="rounded-sm p-2 hover:bg-neutral-200 dark:hover:bg-neutral-700 cursor-pointer"
+                >
+                  <TrashIcon className="size-4 text-muted-foreground" />
+                </div>
+              </ConfirmModal>
             </div>
           </div>
         ))}
