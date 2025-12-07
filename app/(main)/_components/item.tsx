@@ -26,7 +26,7 @@ import { MouseEventHandler } from "react";
 import { toast } from "sonner";
 
 interface ItemProps {
-  onClick: () => void;
+  onClick?: () => void;
   label: string;
   icon: LucideIcon;
 
